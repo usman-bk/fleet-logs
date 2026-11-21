@@ -89,7 +89,8 @@ describe("record bodies", () => {
   });
 
   it("defaults the notes to an empty string", async () => {
-    const { notes: _n, ...noNotes } = rec();
+    const noNotes: Record<string, unknown> = rec();
+    delete noNotes.notes;
     const r = await t("POST", `/api/vehicles/${vid}/records`, noNotes);
     expect(r.body.notes).toBe("");
   });

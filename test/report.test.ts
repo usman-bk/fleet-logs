@@ -39,7 +39,7 @@ describe("cost per vehicle per month", () => {
   it("matches the hand-computed table for January to March", async () => {
     const r = await report("2026-01-01", "2026-03-31");
     expect(r.status).toBe(200);
-    expect(r.body.rows.map(({ vehicleId: _v, ...rest }: any) => rest)).toEqual([
+    expect(r.body.rows.map((x: any) => ({ plate: x.plate, month: x.month, totalPence: x.totalPence, records: x.records }))).toEqual([
       { plate: "AA1 AAA", month: "2026-01", totalPence: 22550, records: 2 },
       { plate: "AA1 AAA", month: "2026-02", totalPence: 20000, records: 1 },
       { plate: "AA1 AAA", month: "2026-03", totalPence: 4999, records: 1 },
