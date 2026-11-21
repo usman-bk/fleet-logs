@@ -49,6 +49,12 @@ export const reportQuery = z.strictObject({
 export function fieldErrors(err: z.ZodError): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of err.issues) {
+    // An unknown key arrives as one issue with an empty path and a list of
+    // names. Report each name against its own field.
+    if (issue.code === "unrecognized_keys") {
+      for (const k of issue.keys) out[[...issue.path, k].join(".")] ??= "not an accepted field";
+      continue;
+    }
     const key = issue.path.join(".") || "_";
     if (!(key in out)) out[key] = issue.message;
   }
